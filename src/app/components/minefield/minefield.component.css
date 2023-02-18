@@ -1,4 +1,7 @@
-.minefield {
+.minefield > button {
   background-color: lightgrey;
   border-radius: 12px;
+}
+.minefield > .col {
+  display: flex;
 }

@@ -1,3 +1,7 @@
 <div class="minefield">
-
+  <div *ngFor="let line of field" class="col">
+    <div *ngFor="let cell of line" class="row">
+      <button>{{ cell.tileContent }}</button>
+    </div>
+  </div>
 </div>
