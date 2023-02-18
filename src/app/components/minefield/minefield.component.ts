@@ -1,13 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Cell } from 'src/app/models/cell';
-// import {} from 'src/utils/random'
-
-function getRandomInt(min: number, max: number): number {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-interface XyPos { x: number, y: number }
+import { Coordinate } from 'src/app/models/coordinate';
+import { RandomService } from 'src/app/services/random.service';
 
 @Component({
   selector: 'app-minefield',
@@ -18,12 +12,12 @@ export class MinefieldComponent implements OnInit {
 
   rowSize: number = 15;
   colSize: number = 12;
-  mineCount: number = 10;
+  mineCount: number = 30;
 
   field: Cell[][] = [];
-  mineCoordinates: XyPos[] = [];
+  mineCoordinates: Coordinate[] = [];
 
-  constructor() {
+  constructor(private rand: RandomService) {
     // Initialize mine field
     for (let i = 0; i < this.colSize; i++) {
       this.field[i] = new Array<Cell>(this.rowSize)
@@ -35,46 +29,43 @@ export class MinefieldComponent implements OnInit {
       for (let j = 0; j < this.rowSize; j++) {
         this.field[i][j] = {
           isRevealed: false,
-          tileContent: null
+          tileContent: null,
+          columnIndex: i,
+          rowIndex: j
         }
       }
     }
 
-
-    this.mineCoordinates = this.generateMineCoordinates()
+    this.mineCoordinates = this.rand.generateMineCoordinates(
+      this.colSize, this.rowSize, this.mineCount
+    )
+    
     for (let i = 0; i < this.mineCoordinates.length; i++) {
       this.field[this.mineCoordinates[i].x][this.mineCoordinates[i].y] = {
         isRevealed: false,
-        tileContent: 'mine'
+        tileContent: 'mine',
+        columnIndex: this.mineCoordinates[i].x,
+        rowIndex: this.mineCoordinates[i].y
       }
     }
   }
 
-  randomXY(): XyPos {
-    return {
-      x: getRandomInt(0, this.colSize - 1),
-      y: getRandomInt(0, this.rowSize - 1)
+  updateCell(cell: Cell, value: number) {
+    const cellCopy = cell;
+    this.field[cell.columnIndex][cell.rowIndex] = {
+      ...cellCopy,
+      tileContent: value,
+      isRevealed: true
     }
   }
 
-  generateMineCoordinates(): XyPos[] {
-    let xyPos: XyPos[] = [];
-    for (let i = 0; i < this.mineCount; i++) {
-      const xy = this.randomXY()
-    console.log(xy);
-
-      if (!xyPos.includes(xy)) {
-        xyPos.push(xy)
-      }
+  reveal(cell: Cell) {
+    if (cell.tileContent === "mine") {
+      alert("game end");
+      // reveal all bombs
+    } else if (cell.tileContent === null) {
+      // check if surrounding cells have bombs
+      this.updateCell(cell, 1.5)
     }
-    
-    return xyPos
   }
-
-  reveal() {
-    // if bomb => end game
-    // if empty => reveal all adjacent numbered cells
-    // if next to bomb => reveal number (count) of bombs
-  }
-
 }

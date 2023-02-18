@@ -1,7 +1,19 @@
-.minefield > button {
+/* .minefield > button {
   background-color: lightgrey;
   border-radius: 12px;
-}
-.minefield > .col {
+} */
+.minefield .col {
   display: flex;
+}
+
+.minefield .tile {
+  @apply w-12 h-12 rounded cursor-pointer border;
+  @apply bg-gray-200 border-gray-50;
+  @apply hover:bg-gray-500 hover:border-gray-300;
+}
+
+.minefield .tile-revealed {
+  @apply w-12 h-12 rounded cursor-pointer border;
+  @apply bg-gray-50 border-gray-200;
+  /* @apply hover:bg-gray-500 hover:border-gray-300; */
 }
