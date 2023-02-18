@@ -30,8 +30,8 @@ export class MinefieldComponent implements OnInit {
         this.field[i][j] = {
           isRevealed: false,
           tileContent: null,
-          columnIndex: i,
-          rowIndex: j
+          columnIndex: j,
+          rowIndex: i
         }
       }
     }
@@ -52,7 +52,7 @@ export class MinefieldComponent implements OnInit {
 
   updateCell(cell: Cell, value: number) {
     const cellCopy = cell;
-    this.field[cell.columnIndex][cell.rowIndex] = {
+    this.field[cell.rowIndex][cell.columnIndex] = {
       ...cellCopy,
       tileContent: value,
       isRevealed: true
