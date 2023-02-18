@@ -1,8 +1,19 @@
 <div class="minefield">
   <div *ngFor="let line of field" class="col">
     <div *ngFor="let cell of line" class="row">
-      <div *ngIf="!cell.isRevealed" class="tile" (click)="reveal(cell)"></div>
-      <div *ngIf="cell.isRevealed" class="tile-revealed">{{cell.tileContent}}</div>
+      <div
+        *ngIf="!cell.isRevealed"
+        class="tile"
+        (click)="reveal(cell)"
+        (mouseover)="hover(cell)"
+      >{{cell.tileContent}}</div>
+      <div *ngIf="cell.isRevealed" class="tile-revealed">
+        {{ cell.tileContent }}
+      </div>
     </div>
   </div>
+
+  <p>x: {{ cursorX }}</p>
+  <p>y: {{ cursorY }}</p>
+  <p>Status: {{ debugStatus | json }}</p>
 </div>

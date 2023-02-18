@@ -10,6 +10,11 @@ import { RandomService } from 'src/app/services/random.service';
 })
 export class MinefieldComponent implements OnInit {
 
+  cursorX: number = 0;
+  cursorY: number = 0;
+
+  debugStatus: any = ''
+
   rowSize: number = 15;
   colSize: number = 12;
   mineCount: number = 30;
@@ -67,20 +72,46 @@ export class MinefieldComponent implements OnInit {
       // reveal all bombs
     } else if (cell.tileContent === null) {
       // check if surrounding cells have bombs
+      this.mineCheck(cell)
       this.updateCell(cell, 1.5)
     }
   }
 
   mineCheck(cell: Cell) {
-    let bombsInArea = []
+    let surroundingTiles: Coordinate[] = []
     let coordTL = { x: cell.columnIndex - 1, y: cell.rowIndex - 1 }
-    let coordT = { x: cell.columnIndex, y: cell.rowIndex }
-    let coordTR = { x: cell.columnIndex + 1, y: cell.rowIndex + 1 }
-    let coordL = { x: cell.columnIndex, y: cell.rowIndex }
-    let coordR = { x: cell.columnIndex, y: cell.rowIndex }
-    let coordBL = { x: cell.columnIndex - 1, y: cell.rowIndex - 1 }
-    let coordB = { x: cell.columnIndex, y: cell.rowIndex }
+    let coordT = { x: cell.columnIndex, y: cell.rowIndex - 1 }
+    let coordTR = { x: cell.columnIndex + 1, y: cell.rowIndex - 1 }
+    let coordL = { x: cell.columnIndex - 1, y: cell.rowIndex }
+    let coordR = { x: cell.columnIndex + 1, y: cell.rowIndex }
+    let coordBL = { x: cell.columnIndex - 1, y: cell.rowIndex + 1 }
+    let coordB = { x: cell.columnIndex, y: cell.rowIndex + 1 }
     let coordBR = { x: cell.columnIndex + 1, y: cell.rowIndex + 1 }
 
+    surroundingTiles.push(coordTL)
+    surroundingTiles.push(coordT)
+    surroundingTiles.push(coordTR)
+    surroundingTiles.push(coordL)
+    surroundingTiles.push(coordR)
+    surroundingTiles.push(coordBL)
+    surroundingTiles.push(coordB)
+    surroundingTiles.push(coordBR)
+
+    let mineCount = 0;
+
+    surroundingTiles.forEach(mine => {
+      console.log(mine);
+      
+      if (this.field[mine.x][mine.y].tileContent === "mine") {
+        mineCount++;
+      }
+    });
+
+    console.log("nearby ", mineCount);
+  }
+
+  hover(cell: Cell) {
+    this.cursorX = cell.columnIndex;
+    this.cursorY = cell.rowIndex;
   }
 }
