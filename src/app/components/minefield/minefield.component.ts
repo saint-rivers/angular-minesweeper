@@ -39,13 +39,13 @@ export class MinefieldComponent implements OnInit {
     this.mineCoordinates = this.rand.generateMineCoordinates(
       this.colSize, this.rowSize, this.mineCount
     )
-    
+
     for (let i = 0; i < this.mineCoordinates.length; i++) {
       this.field[this.mineCoordinates[i].x][this.mineCoordinates[i].y] = {
         isRevealed: false,
         tileContent: 'mine',
-        columnIndex: this.mineCoordinates[i].x,
-        rowIndex: this.mineCoordinates[i].y
+        columnIndex: this.mineCoordinates[i].y,
+        rowIndex: this.mineCoordinates[i].x
       }
     }
   }
@@ -60,6 +60,8 @@ export class MinefieldComponent implements OnInit {
   }
 
   reveal(cell: Cell) {
+    console.log(cell);
+
     if (cell.tileContent === "mine") {
       alert("game end");
       // reveal all bombs
@@ -67,5 +69,18 @@ export class MinefieldComponent implements OnInit {
       // check if surrounding cells have bombs
       this.updateCell(cell, 1.5)
     }
+  }
+
+  mineCheck(cell: Cell) {
+    let bombsInArea = []
+    let coordTL = { x: cell.columnIndex - 1, y: cell.rowIndex - 1 }
+    let coordT = { x: cell.columnIndex, y: cell.rowIndex }
+    let coordTR = { x: cell.columnIndex + 1, y: cell.rowIndex + 1 }
+    let coordL = { x: cell.columnIndex, y: cell.rowIndex }
+    let coordR = { x: cell.columnIndex, y: cell.rowIndex }
+    let coordBL = { x: cell.columnIndex - 1, y: cell.rowIndex - 1 }
+    let coordB = { x: cell.columnIndex, y: cell.rowIndex }
+    let coordBR = { x: cell.columnIndex + 1, y: cell.rowIndex + 1 }
+
   }
 }
